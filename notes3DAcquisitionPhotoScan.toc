@@ -1,0 +1,25 @@
+\contentsline {section}{\numberline {1}Overview}{3}
+\contentsline {paragraph}{Definitions}{3}
+\contentsline {paragraph}{Layout}{3}
+\contentsline {section}{\numberline {2}Camera Calibration: Agisoft Lens}{4}
+\contentsline {subsection}{\numberline {2.1}Which versions?}{4}
+\contentsline {subsection}{\numberline {2.2}Data format}{4}
+\contentsline {subsection}{\numberline {2.3}Inputs}{4}
+\contentsline {subsection}{\numberline {2.4}Outputs}{4}
+\contentsline {subsection}{\numberline {2.5}How to Capture Good Images for the Camera Calibration?}{5}
+\contentsline {subsection}{\numberline {2.6}General Procedure}{5}
+\contentsline {subsection}{\numberline {2.7}How to Check if the Camera Parameters are Coherent?}{6}
+\contentsline {section}{\numberline {3}3D Reconstruction Using SfM: Agisoft PhotoScan}{7}
+\contentsline {subsection}{\numberline {3.1}Which versions?}{7}
+\contentsline {subsection}{\numberline {3.2}Inputs}{7}
+\contentsline {subsection}{\numberline {3.3}Outputs}{8}
+\contentsline {subsection}{\numberline {3.4}How to Capture Good Images for the 3D Reconstruction?}{9}
+\contentsline {subsubsection}{\numberline {3.4.1}Problem 1: When the Object Surface is Well-Textured, but When the Texture is Repetitive and the Shape is Symmetric}{9}
+\contentsline {paragraph}{Problem}{9}
+\contentsline {paragraph}{Solution}{9}
+\contentsline {subsubsection}{\numberline {3.4.2}Problem 2: When the Object Surface is Poorly-Textured}{9}
+\contentsline {paragraph}{Problem}{9}
+\contentsline {paragraph}{Solution}{10}
+\contentsline {subsection}{\numberline {3.5}Procedure}{10}
+\contentsline {subsection}{\numberline {3.6}Good practices}{10}
+\contentsline {subsection}{\numberline {3.7}How to Undistort Images from Agisoft PhotoScan?}{10}

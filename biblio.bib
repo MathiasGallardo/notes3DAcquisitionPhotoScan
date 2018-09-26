@@ -1,0 +1,1232 @@
+%D. Pritchard and W. Heidrich, "Cloth motion capture", in Eurographics '03
+%
+%V. Scholz and M.A. Magnor, Cloth Motion from Optical Flow, Proc. of 9th VMV 2004, Stanford, Ca., USA.
+%
+%H. Spies, B. Jaehne and J.L. Barron, Dense range-flow from depth and intensity data, ICPR 2000.
+%
+%M. Yamamoto, P. Boulanger, J.-A. Beraldin, and M. Rioux, Direct estimation of range flow on deformable shape from a video rate range camera. PAMI, 15(1):82?89, 1993.
+%
+%- papers by Guskov et al.
+%- papers by Scholz/Magnor
+%- paper by Pritchard/Heidrich
+%- papers by Forsyth and various co-authors
+%
+
+% Keywords
+%
+% NR  -- non-rigid
+% SB --  Shape-Based
+%   LR  -- low-rank (or morphable model) = bilinear shape models which are not pre-learned
+%       -- no appearance
+%   AAM -- active appearance model (no difference between 2D and 3D, ie this includes 3DMM)
+%       -- pre-learned shape + appearance models
+%   ASM -- active shape model
+%       -- no appearance
+%   TPS -- Thin-Plate Splines
+%   RBF -- Radial Basis Functions
+%   FFD -- Free-Form Deformations
+%   IR  -- Image Registration
+%   DEM -- demons
+%
+% OF -- optical flow / motion estimation
+%
+% MS  -- model selection
+%   CV  -- Cross-Validation
+%   BIC -- Bayesian Information Criterion
+%   MDL -- Minimum Description Length
+%   AIC -- Akaike Information Criterion
+%   GRIC -- Geometric Robust Information Criterion
+
+% SFT -- Shape-from-Texture
+% SFS -- Shape-from-Shading
+
+%
+% ML  -- Machine Learning
+%
+% SEG -- segmentation
+% DR  -- dimensionality reduction
+% ILL -- illumination
+% UAV -- unmanned aerial vehicule
+% MED -- medical
+% FAC -- faces
+% FEM -- Finite Element Method
+% MI  -- mutual information
+
+% END -- endoscopy
+                  
+% HEC -- hand-eye calibration  
+
+% SST -- scale-space theory
+% PA  -- procrustes analysis
+
+
+% Sections
+%
+% - All but ...
+%   (with letter as e.g. -A-)
+% - Books
+% - Web sites
+% - PhD theses
+
+
+
+% Journals
+@string{ai         = {Artificial Intelligence}}
+@string{ieeetpami  = {{\sc ieee} Transactions on Pattern Analysis and Machine Intelligence}}
+@string{ieeetmi    = {{\sc ieee} Transactions on Medical Imaging}}
+@string{ieeetsp    = {{\sc ieee} Transactions on Signal Processing}}
+@string{ieeetac    = {{\sc ieee} Transactions on Automation and Control}}
+@string{ieeetip    = {{\sc ieee} Transactions on Image Processing}}
+@string{ieeespm    = {{\sc ieee} Signal Processing Magazine}}
+@string{ieeetvcg   = {{\sc ieee} Transactions on Visualization and Computer Graphics}}
+@string{ieeetbe    = {{\sc ieee} Transactions on Biological Engineering}}
+@string{ijcv       = {International Journal of Computer Vision}}
+@string{jvca       = {Journal of Visualization and Computer Animation}}
+@string{cviu       = {Computer Vision and Image Understanding}}
+@string{ras        = {Robotics and Autonomous Systems}}
+@string{josaa      = {Journal of the Optical Society of America A}}
+@string{paa        = {Pattern Analysis and Applications}}
+@string{ijprai     = {International Journal of Pattern Recognition and Artificial Intelligence}}
+@string{cvgip      = {Computer Vision, Graphics and Image Processing}}
+@string{cvgipiu    = {Computer Vision, Graphics and Image Processing: Image Understanding}}
+@string{jprs       = {{\sc isprs} Journal of Photogrammetry and Remote Sensing}}
+@string{mia        = {Medical Image Analysis}}
+@string{jasa       = {Journal of the American Statistical Association}}
+@string{ptrsla     = {Philosophical Transactions of the Royal Society of London A}}
+@string{pnas       = {Proceedings of the National Academy of Sciences of the United States of America}}
+@string{ivc        = {Image and Vision Computing}}
+@string{jmiv       = {Journal of Mathematical Imaging and Vision}}
+@string{mva        = {Machine Vision and Applications}}
+@string{cgf        = {Computer Graphics Forum}}
+@string{cars       = {Journal of Computer Assisted Radiology and Surgery}}
+@string{acmtms     = {{\sc acm} Transactions on Mathematical Software}}
+@string{psyc       = {Psychometrika}}
+@string{jmlr       = {Journal of Machine Learning Research}}
+@string{pr         = {Pattern Recognition}}
+@string{cavw       = {Computer Animation and Virtual Worlds}}
+@string{josaa       = {Journal of the Optical Society of America A}}
+
+
+% Conferences
+@string{threedpvt  = {International Symposium on 3{D} Data Processing, Visualization and Transmission}}
+@string{threedimpvt= {International Conference on 3{D} Data Processing, Visualization and Transmission}}
+@string{eccv       = {European Conference on Computer Vision}}
+@string{iccv       = {International Conference on Computer Vision}}
+@string{cvpr       = {International Conference on Computer Vision and Pattern Recognition}}
+@string{nips       = {Neural Information Processing Systems Conference}}
+@string{accv       = {Asian Conference on Computer Vision}}
+@string{icpr       = {International Conference on Pattern Recognition}}
+@string{icvs       = {International Conference on Computer Vision Systems}}
+@string{bmvc       = {British Machine Vision Conference}}
+@string{eg         = {Eurographics}}
+@string{iros       = {International Conference on Intelligent Robots and Systems}}
+@string{siggraph   = {{\sc siggraph}}}
+@string{sca        = {Eurographics / {\sc siggraph} Symposium on Computer Animation}},
+@string{sgp        = {Eurographics Symposium on Geometry Processing}},
+@string{ismar      = {International Symposium on Mixed and Augmented Reality}}
+@string{ijcai      = {International Joint Conference on Artificial Intelligence}}
+@string{fg         = {International Conference on Automatic Face and Gesture Recognition}}
+@string{icra       = {International Conference on Robotics and Automation}}
+@string{icip       = {International Conference on Image Processing}}
+@string{ecml       = {European Conference on Machine Learning}}
+@string{emmcvpr    = {International Conference on Energy Minimization Methods in Computer Vision and Pattern Recognition}}
+@string{miccai     = {Medical Image Computing and Computer-Assisted Intervention}}
+@string{icpria     = {Iberian Conference on Pattern Recognition and Image Analysis}}
+@string{threedim   = {International Conference on 3-D Digital Imaging and Modeling}}
+@string{scai       = {Scandinavian Conference on Artificial Intelligence}}
+@string{icdsc      = {International Conference on Distributed Smart Cameras}}
+@string{ipmi       = {Information Processing in Medical Imaging}}
+@string{icassp     = {International Conference on Acoustics, Speech, and Signal Processing}}
+@string{scia       = {Scandinavian Conference on Image Analysis}}
+@string{miua       = {Conference on Medical Image Understanding and Analysis}}
+@string{spiemi     = {{\sc spie} Medical Imaging}}
+@string{ipcai      = {International Conference on Information Processing in Computer-Assisted Interventions}}
+
+% Workshops
+@string{vamods     = {Proceedings of the Vision and Modelling of Dynamic Scenes Workshop}}
+@string{va         = {Proceedings of the International Workshop on Vision Algorithms: Theory and Practice}}
+@string{smile      = {Proceedings of the {SMILE} Workshop on 3{D} Structure from Multiple Images of Large-Scale Environments}}
+@string{wbir       = {International Workshop on Biomedical Image Registration}}
+@string{vmv        = {International Workshop on Vision, Modeling and Visualization}}
+@string{nordia     = {Workshop on Non-Rigid Shape Analysis and Deformable Image Alignment}}
+
+% Publishers
+@string{sv         = {Springer-Verlag}}
+@string{cup        = {Cambridge University Press}}
+@string{oup        = {Oxford University Press}}
+@string{mitp       = {The MIT Press, Cambridge, MA, USA}}
+@string{kap        = {Kluwer Academic Publishers}}
+
+% Institutions
+@string{sri        = {{\sc sri} International}}
+
+% series
+@string{lncs       = {Lecture Notes in Computer Science}}
+
+
+%%%
+% Papers: all besides books / web sites / PhD theses
+%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    A     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@book{abbott1886a,
+title = {Flatland: A Romance of Many Dimensions},
+author = {Edwin A. Abbott},
+publisher = {Seely \& Co.},
+year = {1886}
+}
+
+@inproceedings{agudo12a,
+title     = {Finite Elementsed Sequential Bayesian Non-Rigid Structure from Motion},
+author    = {A. Agudo and B. Calvo and J. Montiel},
+booktitle = cvpr,
+year      = {2012},
+keywords  = {NR, FEM}
+}
+
+@inproceedings{ahmedF07a,
+title     = {Shape from Shading Under Various Imaging Conditions},
+author    = {A. H. Ahmed and A. A. Farag},
+booktitle = cvpr,
+year      = {2007},
+keywords  = {SfS}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    B     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{barronASH15a,
+author = {Jonathan T Barron and Andrew Adams and YiChang Shih and Carlos Hern\'andez},
+title = {Fast Bilateral-Space Stereo for Synthetic Defocus},
+journal = cvpr,
+year = {2015},
+}
+
+@Article{bartoli08a,
+  Title                    = {Maximizing the predictivity of smooth deformable image warps through cross-validation},
+  Author                   = {A. Bartoli},
+  Journal                  = jmiv,
+  Year                     = {2008},
+  Number                   = {2-3},
+  Pages                    = {133--145},
+  Volume                   = {31},
+
+  Publisher                = {Springer}
+}
+
+@inproceedings{bartoli08b,
+title     = {Coarse-to-Fine Low-Rank Structure-from-Motion},
+author    = {A. Bartoli and V. Gay-Bellile and U. Castellani and J. Peyras and S. Olsen and P. Sayd},
+booktitle = cvpr,
+year      = {2008},
+keywords  = {NR}
+}
+
+
+@inproceedings{bartoli12a,
+title     = {On {T}emplate-{B}ased {R}econstruction from a {S}ingle {V}iew: {A}nalytical {S}olutions and {P}roofs of {W}ell-{P}osedness for {D}evelopable, {I}sometric and {C}onformal {S}urfaces},
+author    = {A. Bartoli and Y. G\'erard and F. Chadebecq and T. Collins},
+booktitle = cvpr,
+year      = {2012},
+keywords  = {NR}
+}
+
+@inproceedings{bartoli13a,
+title     = {A Robust Analytical Solution to Isometric Shape-from-Template with Focal Length Calibration},
+author    = {A. Bartoli and D. Pizarro and T. Collins},
+booktitle = iccv,
+year      = {2013},
+keywords  = {NR}
+}
+
+@inproceedings{bartoli13b,
+title     = {Template-Based Isometric Deformable 3{D} Reconstruction with Sampling-Based Focal Length Self-Calibration},
+author    = {A. Bartoli and T. Collins},
+booktitle = cvpr,
+year      = {2013},
+keywords  = {SfT}
+}
+
+@Article{bartoliGCCP15a,
+  Title                    = {Shape-from-{T}emplate},
+  Author                   = {A. Bartoli and Y. G\'erard and F. Chadebecq and T. Collins and D. Pizarro},
+  Journal                  = ieeetpami,
+  Year                     = {2015},
+  Number                   = {10},
+  Pages                    = {2099--2118},
+  Volume                   = {37},
+
+  Keywords                 = {SfT, TPS}
+}
+
+@inproceedings{basriJ01a,
+title     = {Lambertian {R}eflectances and {L}inear {S}ubspaces},
+author    = {R. Basri and D.W Jacobs},
+booktitle = iccv,
+year      = {2001},
+keywords  = {SH}
+}
+
+@article{bayETVG08a,
+ author = {Bay, Herbert and Ess, Andreas and Tuytelaars, Tinne and Van Gool, Luc},
+ title = {Speeded-{U}p {R}obust {F}eatures ({SURF})},
+ journal = cviu,
+ volume = {110},
+ number = {3},
+ year = {2008},
+ issn = {1077-3142},
+ pages = {346--359},
+ numpages = {14},
+
+ keywords = {Camera calibration, Feature description, Interest points, Local features, Object recognition}
+}
+
+@article{bellBS14a,
+title	  = {Intrinsic {I}mages in the {W}ild},
+author    = {S. Bell and K. Bala and N. Snavely},
+journal   = {ACM Trans. on Graphics (SIGGRAPH)},
+volume    = {33},
+number    = {4},
+year      = {2014}
+}
+
+@INPROCEEDINGS{blackA93a,
+author={M. J. Black and P. Anandan},
+booktitle={Computer Vision, 1993. Proceedings., Fourth International Conference on},
+title={A {F}ramework for the {R}obust {E}stimation of {O}ptical {F}low},
+year={1993},
+pages={231-236},
+month={May}
+}
+
+
+@inproceedings{bregler00a,
+title     = {Recovering {N}on-{R}igid 3{D} {S}hape from {I}mage {S}treams},
+author    = {C. Bregler and A. Hertzmann and H. Biermann},
+booktitle = cvpr,
+year      = {2000},
+keywords  = {NR}
+}
+
+@inproceedings{blanzV99a,
+  Title     = {Morphable model for the synthesis of 3{D} faces},
+  Author    = {V. Blanz and T. Vetter},
+  booktitle = siggraph,
+  year      = {1999},
+  keywords  = {NR}
+}
+
+
+@misc{bouguetToolbox,
+author = {J.-Y. Bouguet},
+year = {},
+title = {Camera {C}alibration {T}oolbox for {M}atlab},
+howpublished = {\url{https://www.vision.caltech.edu/bouguetj/calib_doc/}}
+}
+
+@inproceedings{brunet10a,
+title     = {Monocular {T}emplate-{B}ased {R}econstruction of {S}mooth and {I}nextensible {S}urfaces},
+author    = {F. Brunet and R. Hartley and A. Bartoli and N. Navab and R. Malgouyres},
+booktitle = accv,
+year      = {2010},
+keywords  = {SfT}
+}
+
+@Article{brunet11a,
+  Title                    = {Feautre-driven direct non-rigid image registration},
+  Author                   = {F. Brunet and V. Gay-Bellile and A. Bartoli and N. Navab and R. Malgouyres},
+  Journal                  = ijcv,
+  Year                     = {2011},
+  Number                   = {1},
+  Pages                    = {33--52},
+  Volume                   = {93},
+
+  Publisher                = {Springer},
+  Keywords                 = {SfT, BBS}
+}
+
+@article{brunet14a,
+title     = {Monocular {T}emplate-{B}ased 3{D} {S}urface {R}econstruction: {C}onvex {I}nextensible and {N}onconvex {I}sometric {M}ethods},
+author    = {F. Brunet and R. Hartley and A. Bartoli},
+Journal = cviu,
+Year = {2014},
+Pages  = {138-154},
+Volume = {125},
+keywords  = {SfT,BBS}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    C    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@Article{chhatkuliPBC16a,
+  Title                    = {A {S}table {A}nalytical {F}ramework for {I}sometric {S}hape-from-{T}emplate by {S}urface {I}ntegration},
+  Author                   = {A. Chhatkuli and D. Pizarro and A. Bartoli and T. Collins},
+  Journal                  = ieeetpami,
+  Year                     = {2016},
+}
+
+
+
+@inproceedings{chhatkuliPB14b,
+title     = {Non-Rigid Shape-from-Motion for Isometric Surfaces using Infinitesimal Planarity},
+author    = {A. Chhatkuli and D. Pizarro and A. Bartoli},
+booktitle = bmvc,
+year      = {2014},
+keywords  = {NRSfM}
+}
+
+
+@inproceedings{chhatkuliPB14a,
+title     = {Stable {T}emplate-{B}ased {I}sometric 3{D} {R}econstruction in {A}ll {I}maging {C}onditions by {L}inear {L}east-{S}quares},
+author    = {A. Chhatkuli and D. Pizarro and A. Bartoli},
+booktitle = cvpr,
+year      = {2014},
+keywords  = {SfT}
+}
+
+@inproceedings{collinsB15a,
+title     = {Realtime {S}hape-from-{T}emplate: {S}ystem and {A}pplications},
+author    = {T. Collins and A. Bartoli},
+booktitle = ismar,
+year      = {2015},
+keywords  = {NR,SfT}
+}
+
+@inproceedings{collinsMB14,
+author ={T. Collins and P. Mesejo and A. Bartoli},
+title ={An {A}nalysis of {E}rrors in {G}raph-{B}ased {K}eypoint {M}atching and {P}roposed {S}olutions},
+booktitle = eccv,
+year = {2014}
+}
+
+@inproceedings{collinsB14a,
+author={Collins, Toby and Bartoli, Adrien},
+title= {Using {I}sometry to {C}lassify {C}orrect/{I}ncorrect 3{D}-2{D} {C}orrespondences},
+bookTitle=eccv,
+year={2014}
+
+}
+
+
+
+@inproceedings{collinsB12a,
+title     = {Towards {L}ive {M}onocular 3{D} {L}aparoscopy using {S}hading and {S}pecularity {I}nformation},
+author    = {T. Collins and A. Bartoli},
+booktitle = ipcai,
+year      = {2012},
+keywords  = {SfS,MED,ILL}
+}
+
+@inproceedings{collinsB10a,
+title     = {Locally {A}ffine and {P}lanar {D}eformable {S}urface {R}econstruction from {V}ideo},
+author    = {T. Collins and A. Bartoli},
+booktitle = {VMV},
+year      = {2010},
+keywords  = {NR}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    D     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@Article{dai14a,
+  Title                    = {A {S}imple {P}rior-{F}ree {M}ethod for {N}on-{R}igid {S}tructure-from-{M}otion {F}actorization},
+  Author                   = {Y. Dai and H. Li and M. He},
+  Journal                  = ijcv,
+  Year                     = {2014},
+  Number                   = {2},
+  Pages                    = {101--122},
+  Volume                   = {107},
+
+  Publisher                = {Springer},
+  Keywords                 = {SfM, SB}
+}
+
+@misc{david3DScan,
+author = {{David 3{D} {S}canner}},
+year = {2014},
+howpublished = {\url{http://www.david-3d.com/en/products/david4}}
+}
+
+@InProceedings{delbue06a,
+  Title                    = {Non-rigid metric shape and motion recovery from uncalibrated images using priors},
+  Author                   = {A. Del Bue and X. Llado and L. Agapito},
+  Booktitle                = cvpr,
+  Year                     = {2006},
+
+  Keywords               = {SfM, SB}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    E     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@Book{eliashberg02a,
+  Title                    = {Introduction to the h{-}{P}rinciple},
+  Author                   = {Y. Eliashberg and Nikolai M. Mishachev},
+  Publisher                = {American Mathematical Society},
+  Year                     = {2002},
+  Number                   = {Grad. Stud. Math. 48}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    F     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@InProceedings{fayadDAA09a,
+  Title                    = {Non-rigid structure from motion using quadratic deformation models},
+  Author                   = {J. Fayad and A. Del Bue and L. Agapito and P.M.Q. Aguiar},
+  Booktitle                = bmvc,
+  Year                     = {2009},
+
+  Keywords               = {SfM, SB}
+}
+
+@Article{felzenszwalbH04a,
+author="Felzenszwalb, Pedro F. and Huttenlocher, Daniel P.",
+title="Efficient {G}raph-{B}ased {I}mage {S}egmentation",
+journal=ijcv,
+volume="59",
+number="2",
+pages="167--181",
+year=2004,
+issn="1573-1405"
+}
+
+
+@article{fleishmanSC05a,
+ author = {Fleishman, Shachar and Cohen-Or, Daniel and Silva, Cl\'{a}udio T.},
+ title = {Robust {M}oving {L}east-{S}quares {F}itting with {S}harp {F}eatures},
+ journal = {ACM Trans. Graph.},
+ issue_date = {July 2005},
+ volume = {24},
+ number = {3},
+ month = jul,
+ year = {2005},
+ issn = {0730-0301},
+ pages = {544--552},
+ numpages = {9},
+ acmid = {1073227},
+ publisher = {ACM}
+} 
+
+@Article{forsyth11a,
+  Title                    = {Variable-{S}ource {S}hading {A}nalysis},
+  Author                   = {D. A. Forsyth},
+  Journal                  = ijcv,
+  Year                     = {2011},
+  Number                   = {3},
+  Volume                   = {91},
+  Pages                    = {280--302}
+}
+
+@article{fukunagaH75a,
+author={K. Fukunaga and L. Hostetler},
+journal={{\sc ieee} Transactions on Information Theory},
+title={The {E}stimation of the {G}radient of a {D}ensity {F}unction, with {A}pplications in {P}attern {R}ecognition},
+year={1975},
+volume={21},
+number={1},
+pages={32-40},
+month={Jan}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    G     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings {galSHPCO07a,
+author       = {Ran Gal and Ariel Shamir and Tal Hassner and Mark Pauly and Daniel Cohen-Or},
+booktitle    = {Proceedings of the fifth Eurographics symposium on Geometry processing},
+organization = {Eurographics Association},
+pages        = {253\textendash262},
+publisher    = {Eurographics Association},
+title        = {Surface {R}econstruction using {L}ocal {S}hape {P}riors},
+year         = {2007}
+}
+
+@inproceedings{gallardoCB16a,
+  Title 					= {Can we {J}ointly {R}egister and {R}econstruct {C}reased {S}urfaces by {S}hape-from-{T}emplate {A}ccurately?},
+  Author					= {M. Gallardo and T. Collins and A. Bartoli},
+  Booktitle 				= eccv,
+  Year 						= {2016}
+} 
+
+@inproceedings{gallardoCB16b,
+  Title 					= {Using {S}hading and a 3{D} {T}emplate to {R}econstruct {C}omplex {S}urface {D}eformations},
+  Author					= {M. Gallardo and T. Collins and A. Bartoli},
+  Booktitle 				= bmvc,
+  Year 						= {2016}
+} 
+
+@inproceedings{gregorskiHJ00a,
+author={B. F. Gregorski and B. Hamann and K. I. Joy},
+booktitle={Computer Graphics International, 2000. Proceedings},
+title={Reconstruction of {B}-spline {S}urfaces from {S}cattered {D}ata {P}oints},
+year={2000},
+pages={163-170},
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    H     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@INPROCEEDINGS{haouchineDBC14a,
+author={N. Haouchine and J. Dequidt and M. O. Berger and S. Cotin},
+booktitle=ismar,
+title={Single {V}iew {A}ugmentation of 3{D} {E}lastic {O}bjects},
+year={2014},
+pages={229-236},
+}
+
+@book{hartley03b,
+author    = {R. I. Hartley and A. Zisserman},
+title     = {Multiple View Geometry in Computer Vision},
+year      = {2003},
+publisher = cup,
+note      = {Second Edition}
+}
+
+@inproceedings{heQ04a,
+author={Ying He and Hong Qin},
+booktitle={Geometric Modeling and Processing, 2004. Proceedings},
+title={Surface {R}econstruction with {T}riangular {B}-splines},
+year={2004},
+pages={279-287},
+}
+
+@ARTICLE{herlingB14a,
+author={J. Herling and W. Broll},
+journal={{\sc ieee} Transactions on Visualization and Computer Graphics},
+title={High-{Q}uality {R}eal-{T}ime {V}ideo {I}npainting with {P}ix{M}ix},
+year={2014},
+volume={20},
+number={6},
+pages={866-879},
+}
+
+@inproceedings{hoppeHD94a,
+ author = {Hoppe, Hugues and DeRose, Tony and Duchamp, Tom and Halstead, Mark and Jin, Hubert and McDonald, John and Schweitzer, Jean and Stuetzle, Werner},
+ title = {Piecewise {S}mooth {S}urface {R}econstruction},
+ booktitle = {Proceedings of the 21st Annual Conference on Computer Graphics and Interactive Techniques},
+ year = {1994},
+ isbn = {0-89791-667-0},
+ pages = {295--302},
+ numpages = {8}
+} 
+
+@techreport{horn70a,
+ author = {Horn, B. K.P.},
+ title = {Shape from {S}hading: {A} {M}ethod for {O}btaining the {S}hape of a {S}mooth {S}hape of a {S}mooth {O}paque {O}bject from {O}ne {V}iew},
+ year = {1970},
+ publisher = {Massachusetts Institute of Technology},
+ address = {Cambridge, MA, USA}
+} 
+
+@Article{horn87a,
+  Title                    = {Closed-form solution of absolute orientation using unit quaternions},
+  Author                   = {B. K. P. Horn},
+  Journal                  = jmiv,
+  Year                     = {1987},
+  Volume                   = {4},
+  Number                   = {4},
+  Pages                    = {629--642}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    I     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@misc{IIW,
+title = {{Intrinsic Images in the Wild}},
+howpublished = {\url{http://opensurfaces.cs.cornell.edu/publications/intrinsic}}
+}
+
+@article{ilicSF06a,
+author="Ili{\'{c}}, Slobodan
+and Salzmann, Mathieu
+and Fua, Pascal",
+title={Implicit {M}eshes for {E}ffective {S}ilhouette {H}andling},
+journal=ijcv,
+year="2006",
+volume="72",
+number="2",
+pages="159--178"
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    J     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+@Article{jinCWPYS08a,
+title     = {3-{D} Reconstruction of Shaded Objects from Multiple Images Under Unknown Illumination},
+author    = {H. Jin and D. Cremers and D. Wang and E. Prados and A. Yezzi and S. Soatto},
+journal   = ijcv,
+year      = {2008},
+number    = {3},
+pages     = {245-256},
+volume    = {76}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    K    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+@INPROCEEDINGS{kaessD03a,
+author={M. Kaess and F. Dellaert},
+booktitle={Proceedings of the First {\sc ieee} International Workshop on Higher-Level Knowledge in 3D Modeling and Motion Analysis},
+title={Reconstruction of {O}bjects with {J}agged {E}dges through {R}ao-{B}lackwellized {F}itting of {P}iecewise {S}mooth {S}ubdivision {C}urves},
+year={2003},
+pages={39-47},
+}
+
+@inproceedings{khanPB14a,
+title     = {Schwarps: {L}ocally {P}rojective {I}mage {W}arps {B}ased on 2{D} {S}chwarzian {D}erivatives},
+author    = {R. Khan and D. Pizarro and A. Bartoli},
+booktitle = eccv,
+year      = {2014},
+keywords  = {IR}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    L     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@misc{l1magic,
+title = {$\ell_1$-MAGIC version october-2005},
+howpublished = {\url{http://statweb.stanford.edu/~candes/l1magic/}},
+}
+
+@INPROCEEDINGS{leclercB91a,
+    author = {Y. G. Leclerc and A. F. Bobick},
+    title = {The Direct Computation of Height from Shading},
+    booktitle = cvpr,
+    year = {1991},
+    pages = {552--558}
+}
+
+@misc{lensCamDescription,
+author = {{Agisoft Lens}},
+title = {Agisoft {L}ens {U}ser {M}anual - Version 0.4.0},
+year = {},
+howpublished = {\url{http://downloads.agisoft.ru/lens/doc/en/lens.pdf}}
+}
+
+@inproceedings{liuyinYAFR16a,
+  Title 					= {Better {T}ogether: {J}oint {R}easoning for {N}on-rigid 3{D} {R}econstruction with {S}pecularities and {S}hading},
+  Author					= {Q. Liu-Yin and R. Yu and L. Agapito and A. Fitzgibbon and C. Russell},
+  Booktitle 				= bmvc,
+  Year 						= {2016}
+} 
+
+@Article{lowe04a,
+title     = {Distinctive {I}mage {F}eatures from {S}cale-{I}nvariant {K}eypoints},
+author    = {D. G. Lowe},
+journal   = ijcv,
+year      = {2004},
+number    = {2},
+pages     = {91-110},
+volume    = {60},
+}
+
+@Article{luong02a,
+title     = {The {R}adiometry of {M}ultiple {I}mages},
+author    = {Q.-Tuan Luongy and P. Fua and Y. Leclerc},
+journal   = ieeetpami,
+year      = {2002},
+number    = {1},
+pages     = {19-33},
+volume    = {24},
+publisher = {IEEE}, 
+keywords  = {ILL}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    M     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{magnenatNZRNRMNFGS15a,
+author={Magnenat, S. and Dat Tien Ngo and Zund, F. and Ryffel, M. and Noris, G. and Rothlin, G. and Marra, A. and Nitti, M. and Fua, P. and Gross, M. and Sumner, R.W.},
+journal=ieeetvcg,
+title={Live {T}exturing of {A}ugmented {R}eality {C}haracters from {C}olored {D}rawings},
+year={2015},
+volume={21},
+number={11},
+pages={1201-1210},
+}
+
+@inproceedings{maltiBH15a,
+  author    = {Abed Malti and Adrien Bartoli and  Richard I. Hartley},
+  title     = {A {L}inear {L}east-{S}quares {S}olution to {E}lastic {S}hape-from-{T}emplate},
+  booktitle = cvpr,
+  year      = {2015}
+}
+
+@article{maltiB14a,
+author={A. Malti and A. Bartoli},
+journal={{\sc ieee} Transactions on Biomedical Engineering},
+title={Combining {C}onformal {D}eformation and {C}ook-{T}orrance {S}hading for 3{D} {R}econstruction in {L}aparoscopy},
+year={2014},
+volume={61},
+number={6},
+pages={1684-1692},
+month={June}
+}
+
+@inproceedings{maltiHBK13a,
+title     = {Monocular {T}emplate-{B}ased 3{D} {R}econstruction of {E}xtensible {S}urfaces with {L}ocal {L}inear {E}lasticity},
+author    = {A. Malti and R. Hartley and A. Bartoli and J. Kim},
+booktitle = cvpr,
+year      = {2013},
+keywords  = {NR}
+}
+
+@inproceedings{maltiBC12a,
+title     = {Template-{B}ased {C}onformal {S}hape-from-{M}otion-and-{S}hading for {L}aparoscopy},
+author    = {A. Malti and A. Bartoli and T. Collins},
+booktitle = ipcai,
+year      = {2012},
+keywords  = {NR}
+}
+
+@INPROCEEDINGS{maltiBC11a,
+author={A. Malti and A. Bartoli and T. Collins},
+booktitle={Proceedings of the {\sc ieee} International Workshop on Dynamic Shape Capture and Analysis at ICCV},
+title={A {P}ixel-{B}ased {A}pproach to {T}emplate-{B}ased {M}onocular 3{D} {R}econstruction of {D}eformable {S}urfaces},
+month = {November},
+year={2011},
+pages={1650-1657}
+}
+
+@misc{radialDistortion,
+author = {{Math{W}orks}},
+year = {},
+title = {cameraParameters class},
+howpublished = {\url{https://ch.mathworks.com/help/vision/ref/cameraparameters-class.html}}
+}
+
+@misc{cameraCalibrator,
+author = {Matlab},
+year = {},
+title = {Camera Calibrator},
+howpublished = {\url{https://ch.mathworks.com/help/vision/ref/cameracalibrator-app.html}}
+}
+
+@misc{cameraCalibrator,
+author = {J.-Y. Bouguet},
+year = {},
+title = {Camera Calibration Toolbox for Matlab},
+howpublished = {\url{https://www.vision.caltech.edu/bouguetj/calib_doc/}}
+}
+
+@inproceedings{morenonoguerSLF09a,
+author = {F. Moreno-Noguer and M. Salzmann and V. Lepetit and P. Fua},
+title = {Capturing 3{D} {S}tretchable {S}urfaces from {S}ingle {I}mages in {C}losed {F}orm},
+booktitle = cvpr,
+year = {2009},
+keywords = {SfT}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    N     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{ngoOF16a,
+  author    = {Dat Tien Ngo and
+               Jonas {\"{O}}stlund and
+               Pascal Fua},
+  title     = {Template-based {M}onocular 3{D} {S}hape {R}ecovery using {L}aplacian {M}eshes},
+  journal   = ieeetpami,
+  volume    = {38},
+  number    = {1},
+  pages     = {172--187},
+  year      = {2016},
+}
+
+@InProceedings{ngoPJCYF15a,
+   author      = {Ngo, Tien Dat and Park, Sanghyuk and Jorstad, Anne
+                 Alison and Crivellaro, Alberto and Yoo, Chang and Fua,
+                 Pascal},
+   booktitle   = iccv,
+   title       = {Dense image registration and deformable surface
+                 reconstruction in presence of occlusions and minimal
+                 texture},
+   unit        = {CVLAB},
+   year        = 2015
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    O     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{ostlundVNF12a,
+ author = {J. Ostlund and A. Varol and T. Ngo and P. Fua.},
+ journal = eccv,
+ title = {Laplacian {M}eshes for {M}onocular 3{D} {S}hape {R}ecovery},
+ year = 2012
+ }
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    P     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@conference {parasharPBC15a,
+	title = {As-{R}igid-{A}s-{P}ossible {V}olumetric {S}hape-from-{T}emplate},
+	booktitle = iccv,
+	year = {2015},
+	author = {Parashar, S. and Pizarro, D. and Bartoli, A. and Collins, T.}
+}
+
+@inproceedings{paulyMGGG05a,
+ author = {Pauly, Mark and Mitra, Niloy J. and Giesen, Joachim and Gross, Markus and Guibas, Leonidas J.},
+ title = {Example-{B}ased 3{D} {S}can {C}ompletion},
+ booktitle = {Proceedings of the Third Eurographics Symposium on Geometry Processing},
+ year = {2005}
+} 
+
+@inproceedings{pentland97a,
+author={A. Pentland},
+booktitle={Computer Vision., Second International Conference on},
+title={Shape {I}nformation {F}rom {S}hading: A {T}heory {A}bout {H}uman {P}erception},
+year={1988},
+pages={404--413},
+month={Dec},
+}
+
+@inproceedings{perriollat08a,
+title     = {Monocular {T}emplate-{B}ased {R}econstruction of {I}nextensible {S}urfaces},
+author    = {M. Perriollat and R. Hartley and A. Bartoli},
+booktitle = bmvc,
+year      = {2008},
+keywords  = {NR}
+}
+
+
+@Article{perriollat11a,
+  Title                    = {Monocular {T}emplate-{B}ased {R}econstruction of {I}nextensible {S}urfaces},
+  Author                   = {M. Perriollat and R. Hartley and A. Bartoli},
+  Journal                  = ijcv,
+  Year                     = {2011},
+  Number                   = {2},
+  Volume                   = {95},
+  Pages                    = {124--137},
+}
+
+@Article{piletLF07a,
+author="Pilet, Julien and Lepetit, Vincent and Fua, Pascal",
+title={Fast {N}on-{R}igid {S}urface {D}etection, {R}egistration and {R}ealistic {A}ugmentation},
+journal=ijcv,
+year="2007",
+volume="76",
+number="2",
+pages="109--122"
+}
+
+@misc{pointgrey,
+author = {{Point Grey}},
+year = {},
+title = {Flea2{G} 1.3 {MP} {C}olor {F}ireWire 1394b ({S}ony {ICX}445)},
+howpublished = {\url{https://www.ptgrey.com/}}
+}
+
+
+
+@misc{photoscan,
+title = {{Agisoft {P}hotoScan 1.0.4}},
+year = {2014}
+}
+
+@misc{photoscanDocs,
+author = {{Agisoft {P}hotoScan 1.2}},
+year = {2014},
+title = {{Agisoft PhotoScan User Manual, Standard Edition, Version 1.2}},
+howpublished = {\url{http://www.agisoft.com/pdf/photoscan_1_2_en.pdf}}
+}
+
+@inproceedings{pizarro13a,
+title     = {Isowarp and {C}onwarp: {W}arps that {E}xactly {C}omply with {W}eak {P}erspective {P}rojection of {D}eforming {O}bjects},
+author    = {D. Pizarro and A. Bartoli and T. Collins},
+booktitle = bmvc,
+year      = {2013},
+keywords  = {NR}
+}
+
+@inproceedings{pradosF05a,
+title     = {Shape {F}rom {S}hading: a well-posed problem?},
+author    = {E. Prados and O. Faugeras},
+booktitle = cvpr,
+year      = {2005},
+keywords  = {SfS}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    Q     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    S     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@Article{salzmannF11a,
+  Title                    = {Linear {L}ocal {M}odels for {M}onocular {R}econstruction of {D}eformable {S}urfaces},
+  Author                   = {M. Salzmann and P. Fua},
+  Journal                  = ieeetpami,
+  Year                     = {2011},
+  Number                   = {5},
+  Pages                    = {931--944},
+  Volume                   = {33},
+
+  Publisher                = {{\sc ieee}}, 
+  Keywords               = {SB}
+}
+
+@inproceedings{salzmannF09a,
+author={M. Salzmann and P. Fua},
+booktitle=cvpr,
+title={Reconstructing {S}harply {F}olding {S}urfaces: {A} {C}onvex {F}ormulation},
+year={2009}
+}
+
+@inproceedings{salzmannUF08a,
+title     = {Local {D}eformation {M}odels for {M}onocular 3{D} {S}hape {R}ecovery},
+author    = {M. Salzmann and M. Urtasun and P. Fua},
+booktitle = cvpr,
+year      = {2008},
+keywords  = {NR}
+}
+
+@inproceedings{salzmann07a,
+title     = {Convex {O}ptimization for {D}eformable {S}urface 3{D} {T}racking},
+author    = {M. Salzmann and R. Hartley and P. Fua},
+booktitle = iccv,
+year      = {2007},
+keywords  = {NR}
+}
+
+@misc{sedumi13,
+title = {{SeDuMi 1.3}},
+howpublished = {\url{http://sedumi.ie.lehigh.edu}},
+}
+
+@article{sumnerP04a,
+ author = {Sumner, Robert W. and Popovi\'{c}, Jovan},
+ title = {Deformation {T}ransfer for {T}riangle {M}eshes},
+ journal = {ACM Trans. Graph.},
+ issue_date = {August 2004},
+ volume = {23},
+ number = {3},
+ month = aug,
+ year = {2004},
+ issn = {0730-0301},
+ pages = {399--405},
+ numpages = {7},
+}
+
+@inproceedings{sundaramBR10a,
+title     = {Dense {P}oint {T}rajectories by {GPU}-accelerate {L}arge {D}isplacement {O}ptical {F}low},
+author    = {N. Sundaram and T. Brox and K. Keutzer},
+booktitle = eccv,
+year      = {2010},
+keywords  = {OF}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    T     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@Article{tomasiK92a,
+  Title                    = {Linear {L}ocal {M}odels for {M}onocular {R}econstruction of {D}eformable {S}urfaces},
+  Author                   = {C. Tomasi and T. Kanade},
+  Journal                  = ijcv,
+  Year                     = {1992},
+  Number                   = {9},
+  Volume                   = {2},
+}
+
+@Article{torresaniHB08a,
+  Title                    = {Nonrigid {S}tructure-from-{M}otion: {E}stimating {S}hape and {M}otion with {H}ierarchical {P}riors},
+  Author                   = {L. Torresani and A. Hertzmann and C. Bregler},
+  Journal                  = ieeetpami,
+  Year                     = {2008},
+  Number                   = {5},
+  Pages                    = {878--892},
+  Volume                   = {30},
+
+  Publisher                = {IEEE}
+}
+
+@inproceedings{taylorJK10a,
+title     = {Non-{R}igid {S}tructure from {L}ocally-{R}igid {M}otion},
+author    = {J. Taylor and A. D. Jepson and K. Kutulakos},
+booktitle = cvpr,
+year      = {2010},
+keywords  = {NR}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    V     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+@Article{varolSSF12a,
+  Title                    = {Monocular 3{D} {R}econstruction of {L}ocally {T}extured {S}urfaces},
+  Author                   = {A. Varol and A. Shaji and M. Salzmann and P. Fua},
+  Journal                  = ieeetpami,
+  Year                     = {2012},
+  Number                   = {6},
+  Volume                   = {34},
+  Keywords                 = {SfT}
+}
+
+@inproceedings{varol09STFa,
+title     = {Template-{F}ree {M}onocular {R}construction of {D}eformable {S}urfaces},
+author    = {A. Varol and M. Salzmann and E. Tola and P. Fua},
+booktitle = iccv,
+year      = {2009},
+}
+
+@inproceedings{vicenteA13a,
+author={S. Vicente and L. Agapito},
+booktitle = {2013 International Conference on 3D Vision - 3DV 2013},
+title = {Balloon {S}hapes: {R}econstructing and {D}eforming {O}bjects with {V}olume from {I}mages},
+month={June},
+year = {2013}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    W     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{whiteF06a,
+     title = {Combining {C}ues: {S}hape from {S}hading and {T}exture},
+     author = {R. White and D. A. Forsyth},
+     booktitle = cvpr,
+     year = {2006}
+} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    X     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+@Article{xiongCBGJZ15a,
+  Title                    = {From {S}hading to {L}ocal {S}hape},
+  Author                   = {Y. Xiong and A. Chakrabarti and R. Basri and S. J. Gortler and D. W. Jacobs and T. Zickler},
+  Journal                  = ieeetpami,
+  Year                     = {2015},
+  Number                   = {1},
+  Volume                   = {37},
+
+  Publisher                = {{\sc ieee}}, 
+  Keywords                 = {SfS}
+}
+
+@inproceedings{xiaoCK04a,
+  Title 					= {A {C}losed-{F}orm {S}olution to {N}on-{R}igid {S}hape and {M}otion {R}ecovery},
+  Author					= {J. Xiao and J. Chai and T. Kanade},
+  Booktitle 				= eccv,
+  Year 						= {2004},
+  Pages 					= {573-587}
+} 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    Y     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@misc{yalmip,
+title = {{YALMIP version 19-June-2014}},
+howpublished = {\url{http://users.isy.liu.se/johanl/yalmip}},
+}
+
+@article{yangWS04a,
+title = "Control point adjustment for B-spline curve approximation ",
+journal = "Computer-Aided Design ",
+volume = "36",
+number = "7",
+pages = "639 - 652",
+year = "2004",
+}
+
+@inproceedings{yuRCA15a,
+  title={Direct, {D}ense, and {D}eformable: {T}emplate-{B}ased {N}on-rigid 3{D} {R}econstruction from {RGB} {V}ideo},
+  author={R. Yu and C. Russell and N. D. F. Campbell and L. Agapito},
+  booktitle=iccv,
+  year={2015}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                                                                                  %%    Z     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{zachPB07a,
+ author = {Zach, C. and Pock, T. and Bischof, H.},
+ title = {A {D}uality {B}ased {A}pproach for {R}ealtime {TV}-{L}1 {O}ptical {F}low},
+ booktitle = {Proceedings of the 29th DAGM Conference on Pattern Recognition},
+ year = {2007},
+ pages = {214--223},
+ numpages = {10}
+} 
+
+
+@article{zhang97a,
+title = "Parameter {E}stimation {T}echniques: a {T}utorial with {A}pplication to {C}onic {F}itting",
+author = "Zhengyou Zhang",
+journal = "Image and Vision Computing",
+volume = "15",
+number = "1",
+pages = "59 - 76",
+year = "1997",
+
+}
+
+@ARTICLE{5557881,
+	author={Salzmann, M. and Fua, P.},
+	journal=ieeetpami,
+	title={Linear Local Models for Monocular Reconstruction of Deformable Surfaces},
+	year={2011},
+}
+
+@INPROCEEDINGS{4587499,
+	author={Salzmann, M. and Urtasun, R. and Fua, P.},
+	booktitle=cvpr,
+	title={Local deformation models for monocular {3D} shape recovery},
+	year={2008}
+}
+
+
+
+
+
+
+@ARTICLE{Zhang99shapefrom,
+    author = {Ruo Zhang and Ping-Sing Tsai and James Edwin Cryer and Mubarak Shah},
+    title = {Shape from {S}hading: A {S}urvey},
+    journal = ieeetpami,
+    year = {1999},
+    volume = {21},
+    number = {8},
+    pages = {690--706}
+}

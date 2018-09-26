@@ -1,0 +1,466 @@
+%Je vois que tu utilises en Latex des macros du style :
+%\def\ie{{\it i.e.}\ }
+%\def\iens{{\it i.e.}}
+%
+%Tu peux avantageusement remplacer ces 2 macros par :
+%\def\ie{{\it i.e.}\xspace}
+%
+%« \xspace » produit un espace uniquement si nécessaire (requiert le paquet « xspace »).
+%
+
+
+% matrices
+\def\m#1{\ensuremath{\mathtt #1}\xspace}
+\def\hm#1{\ensuremath{\hat{\mathtt #1}}\xspace}
+\def\om#1{\ensuremath{\bar{\mathtt #1}}\xspace}
+\def\tm#1{\ensuremath{\tilde{\mathtt #1}}\xspace}
+
+% composing matrices with square brackets
+% for inline matrices
+\def\begmatsm{\left[\begin{smallmatrix}}
+\def\endmatsm{\end{smallmatrix}\right]}
+
+% old matrices
+%\newcommand{\m}[1]{\mathsf{#1}}
+%\newcommand{\tm}[1]{\tilde{\mathsf{#1}}}
+%\newcommand{\cm}[1]{\check{\mathsf{#1}}}
+%\newcommand{\bm}[1]{\breve{\mathsf{#1}}}
+%\newcommand{\um}[1]{\underline{\mathsf{#1}}}
+%\newcommand{\hm}[1]{\hat{\mathsf{#1}}}
+%%\newcommand{\om}[1]{\overline{\mathsf{#1}}}
+%\newcommand{\om}[1]{\bar{\mathsf{#1}}}
+%\newcommand{\tom}[1]{\tilde{\bar{\mathsf{#1}}}}
+
+
+% the camera's focal length in mm
+\def\hf{\ensuremath{\hat f}\xspace}
+% opening parenthesis
+\def\lp{\left(}
+% closing parenthesis
+\def\rp{\right)}
+% the space of continuous differentiable function excluding the plane Z=0
+\def\tiC{\tilde C} 
+
+
+
+%\def\spd{\mathbb{SPD}}
+%\def\sym{\mathbb{SYM}}
+%\def\sp{\mathbb{SP}}
+%\def\su{\mathbb{SU}}
+%\def\so{\mathbb{SO}}
+%\def\sob{\bar{\mathbb{SO}}}
+%\def\K{\mathbb{K}}
+%\def\T{\mathbb{T}}
+%\def\tT{\tilde\T}
+%\def\tK{\tilde\K}
+
+\def\ME{\text{ME}}
+\def\AF{\text{AF}}
+\def\OR{\text{\tiny{OR}}}
+\def\SO{\text{SO}}
+\def\FP{\text{\tiny{FP}}}
+\def\OP{\text{\tiny{OP}}}
+\def\PP{\text{\tiny{PP}}}
+\def\IPP{\text{IPP}}
+\def\WP{\text{\tiny{WP}}}
+\def\IWP{\text{IWP}}
+\def\QN{{\vc Q_0}}
+\def\qn{{\vc q_0}}
+\def\PN{{\vcpi_0}}
+\def\Q{{\vc Q}}
+\def\ZN{{Z_0}}
+
+\def\vup{\mathop{\text{vup}}}
+\def\vdup{\mathop{\text{vdup}}}
+
+
+\def\ca#1{\text{#1}}
+\def\omT{\bar\mT}
+
+\def\oovcpi{\bar{\bar{\vcpi}}}
+
+% coordinate frames
+\def\cF{\ensuremath{\mathfrak{F}}\xspace} % image
+\def\cI{\mathfrak{I}} % image
+\def\cN{\mathfrak{N}} % normalized retina
+\def\cR{\mathfrak{R}} % retina
+\def\cC{\mathfrak{C}} % camera
+\def\cW{\mathfrak{W}} % world
+
+
+
+
+
+\def\dotp#1#2{\left< #1 , #2 \right>}
+
+\def\size{\mathop{\text{size}}}
+\def\nnz{\mathop{\text{nnz}}}
+\def\pleq{\text{+=}}
+\def\mieq{\text{--=}}
+\def\find{\mathop{\text{find}}}
+\def\chol{\mathop{\text{chol}}}
+
+
+\def\fpder#1#2{\frac{\partial #1}{\partial #2}}
+\def\spder#1#2{\frac{\partial^2 #1}{\partial #2^2}}
+\def\spdercr#1#2#3{\frac{\partial^2 #1}{\partial #2 \partial #3}}
+\def\Cone{\C_1}
+\def\Czero{\C_0}
+
+
+\def\dd{{\rm d}}
+
+%\def\v#1{\mathbf{#1}}
+\newcommand{\vc}[1]{\mathbf{#1}}
+\newcommand{\tvc}[1]{{\tilde{\mathbf{#1}}}}
+\newcommand{\cvc}[1]{\check{\mathbf{#1}}}
+\newcommand{\bvc}[1]{\breve{\mathbf{#1}}}
+\newcommand{\uvc}[1]{\underline{\mathbf{#1}}}
+\newcommand{\hvc}[1]{\hat{\mathbf{#1}}}
+%\newcommand{\ovc}[1]{\overline{\mathbf{#1}}}
+%\newcommand{\oovc}[1]{\overline{\overline{\mathbf{#1}}}}
+\newcommand{\ovc}[1]{\bar{\mathbf{#1}}}
+\newcommand{\oovc}[1]{\bar{{\mathbf{#1}}}}
+
+\newcommand{\hovc}[1]{\hat{\ovc{#1}}}
+
+
+\newcommand{\co}{\,\,\,}
+\newcommand{\cox}{\co\co}
+\newcommand{\coxx}{\co\co\co\co}
+
+\newcommand{\pp}{}
+%\newcommand{\co}{\,\,\,\,\,\,\,}
+\newcommand{\sep}{\co|\co}
+
+\def\evalat#1#2{\left. #1 \right|_{#2}}
+
+\def\jac{\blacktriangledown}
+
+% To typeset physical entities
+\def\pem#1{\boldsymbol{\mathit{#1}}}
+\def\hpem#1{\hat{\pem{#1}}}
+\def\tpem#1{\tilde{\pem{#1}}}
+\def\upem#1{\underline{\pem{#1}}}
+\def\pe#1{$\pem{#1}$} 
+\def\hpe#1{$\hpem{#1}$}
+\def\tpe#1{$\tpem{#1}$}
+\def\upe#1{$\upem{#1}$}
+
+\def\vcjmath{\boldsymbol{\jmath}}
+\def\vcimath{\boldsymbol{\imath}}
+\def\vcell{\boldsymbol{\ell}}
+
+\newcommand{\vcvarepsilon}{{\boldsymbol{\varepsilon}}}
+\newcommand{\vceta}{{\boldsymbol{\eta}}}
+\newcommand{\vczeta}{{\boldsymbol{\zeta}}}
+\newcommand{\vcsigma}{{\boldsymbol{\sigma}}}
+\newcommand{\vcomega}{{\boldsymbol{\omega}}}
+\newcommand{\vcpi}{{\boldsymbol{\pi}}}
+\newcommand{\vcPi}{{\boldsymbol{\Pi}}}
+\newcommand{\vcXi}{{\boldsymbol{\Xi}}}
+\newcommand{\vcxi}{{\boldsymbol{\xi}}}
+\newcommand{\ovcPi}{\bar{\boldsymbol{\Pi}}}
+\newcommand{\vcgamma}{{\boldsymbol{\gamma}}}
+\newcommand{\vcphi}{{\boldsymbol{\phi}}}
+\newcommand{\vcalpha}{{\boldsymbol{\alpha}}}
+\newcommand{\vclambda}{{\boldsymbol{\lambda}}}
+\newcommand{\vcbeta}{{\boldsymbol{\beta}}}
+\newcommand{\vctheta}{{\boldsymbol{\theta}}}
+\newcommand{\vcdelta}{\boldsymbol{\delta}}
+\newcommand{\vcDelta}{\boldsymbol{\Delta}}
+\newcommand{\vcnabla}{\boldsymbol{\nabla}}
+\newcommand{\vcnu}{\boldsymbol{\nu}}
+\newcommand{\vcmu}{\boldsymbol{\mu}}
+\newcommand{\vcMu}{\boldsymbol{\Mu}}
+%\newcommand{\ovcpi}{\overline{\boldsymbol{\pi}}}
+\newcommand{\ovcpi}{\bar{\boldsymbol{\pi}}}
+\newcommand{\ovcdelta}{\bar{\boldsymbol{\delta}}}
+\newcommand{\ovctheta}{\bar{\boldsymbol{\theta}}}
+\newcommand{\tvcbeta}{\tilde{\boldsymbol{\beta}}}
+\newcommand{\tvcdelta}{\tilde{\boldsymbol{\delta}}}
+
+%\def\u#1{\underline{#1}}
+\def\sign{\mathop{\mathrm{sign}}}
+%\def\sign{\textrm{sign}}
+\def\rms{\textrm{rms}}
+\def\vect{\textrm{vect}}
+\def\rang{\textrm{rang}}
+\def\trace{\textrm{tr}}
+
+\def\eqdef{\stackrel{\textnormal{def}}{=}}
+%\def\eqdef{\stackrel{\textrm{def}}{=}}
+\def\simdef{\stackrel{\textnormal{def}}{\sim}}
+%\def\simdef{\stackrel{\textrm{def}}{\sim}}
+\def\eqsp#1{\,\,\,#1\,\,\,}
+\def\eqspdef{\eqsp{\eqdef}}
+\def\eqspapprox{\eqsp{\approx}}
+\def\eqspeq{\eqsp{=}}
+%\def\eqsp#1{\quad#1\quad}
+
+
+% calligraphic letters
+\def\mA{\mathcal A}
+\def\mB{\mathcal B}
+\def\mC{\mathcal C}
+\def\mD{\mathcal D}
+\def\mF{\mathcal F}
+\def\mG{\mathcal G}
+\def\mH{\mathcal H}
+\def\mI{\mathcal I}
+\def\mJ{\mathcal J}
+\def\mN{\mathcal N}
+\def\mQ{\mathcal Q}
+\def\mE{\mathcal E}
+\def\mL{\mathcal L}
+\def\mO{\mathcal O}
+\def\mP{\mathcal P}
+\def\mR{\mathcal R}
+\def\mT{\mathcal T}
+\def\mM{\mathcal M}
+\def\mU{\mathcal U}
+\def\mS{\mathcal S}
+\def\mK{\mathcal K}
+\def\mV{\mathcal V}
+\def\mX{\mathcal X}
+\def\mW{\mathcal W}
+\def\mY{\mathcal Y}
+\def\mZ{\mathcal Z}
+
+\def\ml{\mathcal l}
+
+\def\hmI{\hat\mI}
+\def\hmJ{\hat\mJ}
+\def\hmF{\hat\mF}
+\def\hmQ{\hat\mQ}
+\def\hmM{\hat\mM}
+\def\hmP{\hat\mP}
+\def\hmX{\hat\mX}
+
+\def\tmA{\tilde\mA}
+\def\tmB{\tilde\mB}
+\def\tmC{\tilde\mC}
+\def\tmD{\tilde\mD}
+\def\tmE{\tilde\mE}
+\def\tmF{\tilde\mF}
+\def\tmG{\tilde\mG}
+\def\tmI{\tilde\mI}
+\def\tmL{\tilde\mL}
+\def\tmM{\tilde\mM}
+\def\tmN{\tilde\mN}
+\def\tmP{\tilde\mP}
+\def\tmQ{\tilde\mQ}
+\def\tmR{\tilde\mR}
+\def\tmS{\tilde\mS}
+\def\tmT{\tilde\mT}
+\def\tmV{\tilde\mV}
+\def\tmW{\tilde\mW}
+\def\tmX{\tilde\mX}
+
+\def\omA{\bar\mA}
+\def\omB{\bar\mB}
+\def\omC{\bar\mC}
+\def\omE{\bar\mE}
+\def\omG{\bar\mG}
+\def\omJ{\bar\mJ}
+\def\omM{\bar\mM}
+\def\omN{\bar\mN}
+\def\omP{\bar\mP}
+\def\omS{\bar\mS}
+\def\omR{\bar\mR}
+\def\omW{\bar\mW}
+\def\omX{\bar\mX}
+\def\omY{\bar\mY}
+
+\def\ohmQ{\bar{\hat\mQ}}
+
+\def\homX{\hat{\bar\mX}}
+
+\def\umU{\underline\mU}
+\def\umY{\underline\mY}
+\def\umZ{\underline\mZ}
+
+\def\uhmI{\underline\hmI}
+\def\uhmP{\underline\hmP}
+\def\uhmZ{\underline\hmZ}
+
+\def\cmG{\check\mG}
+\def\cmL{\check\mL}
+\def\cmM{\check\mM}
+\def\cmW{\check\mW}
+
+\def\tA{{\tt A}}
+\def\tC{{\tt C}}
+\def\tD{{\tt D}}
+\def\tH{{\tt H}}
+\def\tS{{\tt S}}
+\def\tZ{{\tt Z}}
+
+
+\def\eme#1{{#1}^{\textrm{\`eme}}}
+
+% deprecated
+% \renewcommand{\tr}{^\mathsf{T}}
+% \renewcommand{\mtr}{^\mathsf{-T}}
+
+%\newcommand{\tr}[1]{{#1}^\mathsf{T}}
+%\newcommand{\mtr}[1]{{#1}^\mathsf{-T}}
+%\newcommand{\trpinv}[1]{{#1}^{\dag\mathsf{T}}}
+
+\newcommand{\tr}[1]{{#1}^\top}
+\newcommand{\mtr}[1]{{#1}^{-\top}}
+\newcommand{\trpinv}[1]{{#1}^{\dag\top}}
+
+\def\inv#1{{#1}^{-1}}
+\def\pinv#1{{#1}^{\dag}}
+%\def\vup{\mathop{\text{vup}}}
+\def\diag{\mathop{\text{diag}}}
+\def\rank{\mathrm{rank}}
+\def\odd{\mathrm{odd}}
+\def\even{\mathrm{even}}
+
+\def\crp{\wedge}
+\def\mcrp#1{\left[{#1}\right]_\crp}
+\def\ecrp{\times}
+\def\emcrp#1{\left[{#1}\right]_\ecrp}
+
+\newcommand{\reftab}[1]{\ref{tab:#1}}
+\newcommand{\lbltab}[1]{\label{tab:#1}}
+\newcommand{\refthm}[1]{\ref{thm:#1}}
+\newcommand{\lblthm}[1]{\label{thm:#1}}
+\newcommand{\reflem}[1]{\ref{lem:#1}}
+\newcommand{\lbllem}[1]{\label{lem:#1}}
+\newcommand{\refpro}[1]{\ref{pro:#1}}
+\newcommand{\lblpro}[1]{\label{pro:#1}}
+\newcommand{\refcor}[1]{\ref{cor:#1}}
+\newcommand{\lblcor}[1]{\label{cor:#1}}
+\newcommand{\refsec}[1]{\ref{sec:#1}}
+\newcommand{\lblsec}[1]{\label{sec:#1}}
+\newcommand{\refeqn}[1]{\ref{eqn:#1}}
+\newcommand{\refeqnp}[1]{(\ref{eqn:#1})}
+\newcommand{\lbleqn}[1]{\label{eqn:#1}}
+\newcommand{\reffig}[1]{\ref{fig:#1}}
+\newcommand{\lblfig}[1]{\label{fig:#1}}
+\newcommand{\refchp}[1]{\ref{chp:#1}}
+\newcommand{\lblchp}[1]{\label{chp:#1}}
+
+\newcommand{\refpgetab}[1]{\pageref{tab:#1}}
+
+
+%\newtheorem{theoreme}{Théorème}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{corollary}{Corollary}
+%\newtheorem{corollaire}{Corollaire}
+
+%\newtheorem{proposition}{Proposition}
+%\newtheorem{definition}{Definition}
+%\newtheorem{corollary}{Corollary}
+
+\def\A{\mathbb{A}}
+\def\B{\mathbb{B}}
+\def\C{\mathbb{C}}
+\def\D{\mathbb{D}}
+\def\G{\mathbb{G}}
+\def\H{\mathbb{H}}
+%\def\R{\ensuremath{\mathbb{R}}\xspace}
+\def\R{\mathbb{R}}
+\def\P{\mathbb{P}}
+\def\E{\mathbb{E}}
+\def\N{\mathbb{N}}
+\def\F{\mathbb{F}}
+\def\W{\mathbb{W}}
+\def\X{\mathbb{X}}
+\def\Y{\mathbb{Y}}
+\def\bbS{\mathbb{S}}
+\def\bbO{\mathbb{O}}
+\def\tG{\tilde{\mathbb{G}}}
+\def\tO{\tilde{\mathbb{O}}}
+\def\oP{\bar{\mathbb{P}}}
+\def\obbS{\bar\bbS}
+\def\obbO{\bar\bbO}
+\def\tbbS{\tilde\bbS}
+
+\def\I{\m I}
+\def\oI{\bar\I}
+\def\tI{\tilde\I}
+\def\hI{\hat\I}
+
+\def\3D{{\mbox{\itshape 3D}}}
+\def\2D{{\itshape 2D}}
+\def\1D{{\itshape 1D}}
+\def\nD#1{{\itshape #1D}}
+
+\def\L2{\mathcal{L}_2}
+
+\def\algo#1{{\scshape {\em #1}}}
+
+\def\etal{{\it et al.}\ }
+\def\etalns{{\it et al.}}
+\def\etalnp{{\it et al}}
+\def\dof{\mbox{{\scshape dof}}}
+
+%\def\min#1{\mathop{min}\limits_{\substack{#1}}}
+\def\min#1{\underset{#1}{\text{min}}}
+\def\max#1{\mathop{max}\limits_{\substack{#1}}}
+\def\argmin#1{\mathop{argmin}\limits_{\substack{#1}}}
+\def\argmax#1{\mathop{argmax}\limits_{\substack{#1}}}
+\def\conv{\mathop{\mathrm{conv}}}
+\def\area{\mathop{\mathrm{area}}}
+\def\mean{\mathop{\mathrm{mean}}}
+\def\Pr{\mathrm{Pr}}
+
+%\def\notinfty{\not\!\!\infty}
+\def\notinfty{\mbox{---}\!\!\!\!\!\!\infty}
+
+\newenvironment{struct}{\begin{itemize}\addtolength{\itemsep}{-0.5\baselineskip}\em}{\end{itemize}}
+
+\def\tinymath#1{\mbox{\tiny{$#1$}}}
+
+\newcommand{\mytitle}[2]{\title{\vspace{-1cm}
+\begin{center}
+\normalsize{\textnormal{\scshape{#1}}}
+\end{center}
+\vspace{1cm}
+#2}}
+\newcommand{\mytitlestar}[2]{\title*{\vspace{-2cm}
+\begin{center}
+\normalsize{\textnormal{\scshape{#1}}}
+\end{center}
+\vspace{0cm}
+#2}}
+
+% begin matrix or vector
+\def\bmv#1{\left(\begin{array}{#1}}
+\def\bmvc{\left(\begin{array}{c}}
+\def\bmvcc{\left(\begin{array}{cc}}
+\def\bmvccc{\left(\begin{array}{ccc}}
+\def\bmvcccc{\left(\begin{array}{cccc}}
+\def\emv{\end{array}\right)}
+
+
+\def\eg{{\it e.g.}\ }
+\def\ie{{\it i.e.}\ }
+\def\egns{{\it e.g.}}
+\def\iens{{\it i.e.}}
+\def\etc{{\it etc.}\ }
+\def\etcns{{\it etc.}}
+\def\idem{{\it idem}}
+\def\adhoc{{\it ad hoc} }
+
+\def\intp#1{\lfloor{#1}\rfloor}
+
+\def\SO3{SO(3)}
+%\def\and{\co\co\co\mbox{ and }\co\co\co}
+\def\myand{\co\co\co\mbox{ and }\co\co\co}
+\def\et{\co\co\co\mbox{ et }\co\co\co}
+\def\myor{\co\co\co\mbox{ or }\co\co\co}
+\def\with{\co\co\co\mbox{ with }\co\co\co}
+\def\avec{\co\co\co\mbox{ avec }\co\co\co}
+\def\st{\co\co\co\mbox{ s.t. }\co\co\co}
+\def\tpq{\co\co\co\mbox{ t.q. }\co\co\co}
+\def\equal{\co\co\co\mbox{ = }\co\co\co}
+\def\kron{\otimes}
+
+\def\sz#1#2{\ensuremath{(#1\times #2)}\xspace}
+%\def\msz#1#2{$\sz{#1}{#2}$}

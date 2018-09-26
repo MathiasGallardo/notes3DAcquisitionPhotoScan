@@ -1,0 +1,35 @@
+\begin{thebibliography}{5}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{Agisoft Lens}()]{lensCamDescription}
+{Agisoft Lens}.
+\newblock Agisoft {L}ens {U}ser {M}anual - version 0.4.0.
+\newblock \url{http://downloads.agisoft.ru/lens/doc/en/lens.pdf}.
+
+\bibitem[{Agisoft {P}hotoScan 1.2}(2014)]{photoscanDocs}
+{Agisoft {P}hotoScan 1.2}.
+\newblock {Agisoft PhotoScan User Manual, Standard Edition, Version 1.2}.
+\newblock \url{http://www.agisoft.com/pdf/photoscan_1_2_en.pdf}, 2014.
+
+\bibitem[Bouguet()]{bouguetToolbox}
+J.-Y. Bouguet.
+\newblock Camera {C}alibration {T}oolbox for {M}atlab.
+\newblock \url{https://www.vision.caltech.edu/bouguetj/calib_doc/}.
+
+\bibitem[{Math{W}orks}()]{radialDistortion}
+{Math{W}orks}.
+\newblock cameraparameters class.
+\newblock
+  \url{https://ch.mathworks.com/help/vision/ref/cameraparameters-class.html}.
+
+\bibitem[Matlab()]{cameraCalibrator}
+Matlab.
+\newblock Camera calibrator.
+\newblock
+  \url{https://ch.mathworks.com/help/vision/ref/cameracalibrator-app.html}.
+
+\end{thebibliography}
