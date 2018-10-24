@@ -31,8 +31,10 @@ formatImagesUndistorted = 'png';
 %% DEFINE THE DESIRED VIEWS 
 numViews = 17; % the views index for which you want to compute the barycentric map; can be a list
 
+scalePS2mm = 1; % the scale between the real distance and the distance on the 3D model (here, it is fixed arbitrarily)
+
 %% LIST ALL IMAGES IN THE FOLDER
-[images, imagefiles] = getImagesInFolder(path2Undistort,formatImagesUndistorted);
+nfiles = dir([path2Undistort '*.' formatImagesUndistorted]);
 
 %% 
 build3DModelFromPhotoScan(path23DModel,...
@@ -49,7 +51,7 @@ model = model.model;
 %% COMPUTE THE BARYCENTRIC MAP FOR EACH VIEW
 for i = 1:length(numViews)
     
-    load([path23DModel '/views_undistorted/',imagefiles(numViews(i)).name(1:end-4),'_BaryMap.mat']);    % generated automatically
+    load([path23DModel '/views_undistorted/',nfiles(numViews(i)).name(1:end-4),'_BaryMap.mat']);    % generated automatically
 
     vertexPos = model.surfaceMesh.vertexPos';
 
@@ -64,8 +66,12 @@ for i = 1:length(numViews)
     faces = model.surfaceMesh.faces;   
     
     %
-    P.vertexPos = vertexPos;
+    P.vertexPos = vertexPos; % scalePS2mm should be put as factor if you want to put the GT at the correct scale. 
+    % Be careful: if you plan to use the GT to compute later the 3D
+    % position of other 2D points using the barycentric map, REMOVE the
+    % scale!!!
+    
     P.faces = faces;
-    P.B = B; % add the barycentric map
-    save([path23DModel '/views_undistorted/',imagefiles(numViews(i)).name(1:end-4),'_GT'],'P');    
+    P.B = B; % Add the barycentric map
+    save([path23DModel '/views_undistorted/',nfiles(numViews(i)).name(1:end-4),'_GT'],'P');    
 end

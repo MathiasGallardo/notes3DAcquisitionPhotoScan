@@ -24,22 +24,24 @@ formatImagesUndistorted = 'png';
 
 numViews = 17; % the views index for which you want to compute the 3D points; can be a list
 
+scalePS2mm = 1; % the scale between the real distance and the distance on the 3D model (here, it is fixed arbitrarily)
+
 %% LOAD THE 2D IMAGE POINTS GIVEN BY THE USER
 C = load([path2ImagePts 'imagePoints.mat']);
 
 %% LIST ALL IMAGES IN THE FOLDER
-[images, imagefiles] = getImagesInFolder(path2Undistorted,formatImagesUndistorted);
+nfiles = dir([path2Undistorted '*.' formatImagesUndistorted]);
 
 %% COMPUTE THE 3D OF THE IMAGE POINTS
 for i = 1:length(numViews)
     % Get the 3D data for each view
-    GT = load([path23DModel '/views_undistorted/',imagefiles(numViews(i)).name(1:end-4),'_GT']);
+    GT = load([path23DModel '/views_undistorted/',nfiles(numViews(i)).name(1:end-4),'_GT']);
     faces = GT.P.faces;
     vertexPos = GT.P.vertexPos';
     baryMask = GT.P.B;
     
     % Load the associated image
-    image = imread([path2Undistorted,imagefiles(numViews(i)).name(1:end-4) '.' formatImagesUndistorted]);
+    image = imread([path2Undistorted,nfiles(numViews(i)).name(1:end-4) '.' formatImagesUndistorted]);
 
     % Get the image points given by the user
     pts2D = C.imagePoints.ptsImg{numViews(i)};
@@ -74,6 +76,9 @@ for i = 1:length(numViews)
     end
 
 
+    % Put the 3D at the correct scale
+    pts3D = pts3D*scalePS2mm;
+    
     % Display
     figure(i);
     clf;
@@ -82,9 +87,9 @@ for i = 1:length(numViews)
     hold on;
     plot(pts2D(1,:),pts2D(2,:),'r+');
     hold off;
-    title(['2D correspondences for ' imagefiles(numViews(i)).name(1:end-4)]);
+    title(['2D correspondences for ' nfiles(numViews(i)).name(1:end-4)]);
     subplot(122);
     plot3(pts3D(:,1),pts3D(:,2),pts3D(:,3),'r.');
     axis equal;
-    title(['3D correspondences for ' imagefiles(numViews(i)).name(1:end-4)]);
+    title(['3D correspondences for ' nfiles(numViews(i)).name(1:end-4)]);
 end
